@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 const Theme = createTheme({
   typography: {
-    fontFamily: "'Playfair Display', 'serif'",
+    fontFamily: "'Roboto Condensed', 'sans-serif'",
     textTransform: 'none',
   }
 });

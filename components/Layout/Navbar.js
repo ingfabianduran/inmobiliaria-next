@@ -7,7 +7,8 @@ import Typography from '@mui/material/Typography';
 function Navbar() {
   return(
     <AppBar
-      position='static'>
+      position='static'
+      sx={{ backgroundColor: '#0583F2' }}>
       <Toolbar>
         <Typography>Inbobiliaria Duran</Typography>
       </Toolbar>
