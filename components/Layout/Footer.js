@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 function Footer() {
   return (
     <Paper
-      sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#F25C05' }}
+      sx={{ bottom: 0, left: 0, right: 0, backgroundColor: '#F25C05' }}
       elevation={3}>
       <Box
         className='footer' 
