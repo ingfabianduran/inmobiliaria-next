@@ -1,10 +1,18 @@
+import { useState } from 'react';
 import { Layout } from '../components/Layout/Layout';
-import { Container, Grid, Stack, Pagination } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { CardInmueble } from '../components/Inmobiliaria/CardInmueble';
+import { PaginationPage } from '../components/Layout/PaginationPage';
+import { Loader } from '../components/Layout/Loader';
+import { ENDPOINT } from '../api/config';
 
 export default function Home({ inmuebles, numPages }) {
+  const [dataInmuebles, setDataInmuebles] = useState(inmuebles);
   return (
     <Layout>
+      <Loader
+        loading={false}> 
+      </Loader>
       <Container
         className='container'>
         <Grid 
@@ -17,31 +25,27 @@ export default function Home({ inmuebles, numPages }) {
                 item
                 xs={4}>
                   <CardInmueble
-                    imagen='https://via.placeholder.com/640x480.png/00dd66?text=quae'
+                    imagen={inmueble.fotos[0].url}
                     tipo={inmueble.tipo}
-                    barrio='Villa Luz'
-                    costo='950.000'>
+                    barrio={inmueble.barrio.nombre}
+                    costo={inmueble.costo}>
                   </CardInmueble>
               </Grid>
             ))
           }
         </Grid>
-        <Stack
-          sx={{ marginTop: 3, marginBottom: 3 }}
-          spacing={2}>
-          <Pagination
-            sx={{ display: 'flex', justifyContent: 'center', }}
-            color='primary'
-            count={numPages}>
-          </Pagination>
-        </Stack>
+        <PaginationPage
+          numPages={numPages}
+          url='inmuebles/all'
+          setData={setDataInmuebles}>
+        </PaginationPage>
       </Container>
     </Layout>
   )
 }
 
 export async function getServerSideProps(context) {
-  const res = await fetch('http://127.0.0.1:8000/api/inmuebles/all');
+  const res = await fetch(`${ENDPOINT}inmuebles/all`);
   const { data, last_page } = await res.json();
   return {
     props: {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button } from '@mui/material';
+import numeral from 'numeral';
 
 function CardInmueble({ imagen, tipo, barrio, costo }) {
   return (
@@ -24,7 +25,7 @@ function CardInmueble({ imagen, tipo, barrio, costo }) {
             variant='body2' 
             color='text.secondary'
             sx={{ textAlign: 'justify' }}>
-            { `Ubicado en el barrio ${barrio}. Tiene un costo de $ ${costo}` }
+            { `Ubicado en el barrio ${barrio}. Tiene un costo de ${numeral(costo).format('$0,0.00')}` }
           </Typography>
         </CardContent>
       </CardActionArea>
