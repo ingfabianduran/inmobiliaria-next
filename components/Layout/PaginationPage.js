@@ -1,14 +1,12 @@
 import React from 'react';
 import { Stack, Pagination } from '@mui/material';
-import { ENDPOINT } from '../../api/config';
+import { useRouter } from 'next/router';
 
-function PaginationPage({ numPages, url, setData }) {
+function PaginationPage({ numPages, url }) {
+  const router = useRouter();
   const getData = async(event, value) => {
-    const res = await fetch(`${ENDPOINT}${url}?page=${value}`);
-    const { data } = res.json();
-    setData(data);
+    router.push(`${url}?page=${value}`);
   };
-
   return (
     <Stack
       sx={{ marginTop: 3, marginBottom: 3 }}
