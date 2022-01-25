@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button } from '@mui/material';
+import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import numeral from 'numeral';
 
 function CardInmueble({ imagen, tipo, barrio, costo }) {

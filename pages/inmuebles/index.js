@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import { Layout } from '../../components/Layout/Layout';
+import Head from 'next/head';
 import { Container, Grid } from '@mui/material';
 import { CardInmueble } from '../../components/Inmobiliaria/CardInmueble';
 import { PaginationPage } from '../../components/Layout/PaginationPage';
-import { Loader } from '../../components/Layout/Loader';
 import { ENDPOINT } from '../../api/config';
 
 export default function Home({ inmuebles, numPages }) {
   return (
-    <Layout>
-      <Loader
-        loading={false}> 
-      </Loader>
+    <>
+      <Head>
+        <title>Inmuebles</title>
+      </Head>
       <Container
         className='container'>
         <Grid 
           container
-          rowSpacing={3}>
+          rowSpacing={3}
+          justifyContent='center'
+          alignItems='center'
+          sx={{ minHeight: '80vh' }}>
           {
             inmuebles.map(inmueble => (
               <Grid
@@ -38,7 +39,7 @@ export default function Home({ inmuebles, numPages }) {
           url='/inmuebles'>
         </PaginationPage>
       </Container>
-    </Layout>
+    </>
   )
 }
 
