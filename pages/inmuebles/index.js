@@ -1,15 +1,26 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import { Container, Grid } from '@mui/material';
 import { CardInmueble } from '../../components/Inmobiliaria/CardInmueble';
 import { PaginationPage } from '../../components/Layout/PaginationPage';
 import { ENDPOINT } from '../../api/config';
+import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
 
 export default function Home({ inmuebles, numPages }) {
+  const [open, setOpen] = useState(false);
+
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
+
   return (
     <>
       <Head>
         <title>Inmuebles</title>
       </Head>
+      <ModalInmueble
+        open={open}
+        closeModal={closeModal}>
+      </ModalInmueble>
       <Container
         className='container'>
         <Grid 
@@ -28,7 +39,8 @@ export default function Home({ inmuebles, numPages }) {
                     imagen={inmueble.fotos[0].url}
                     tipo={inmueble.tipo}
                     barrio={inmueble.barrio.nombre}
-                    costo={inmueble.costo}>
+                    costo={inmueble.costo}
+                    openModal={openModal}>
                   </CardInmueble>
               </Grid>
             ))

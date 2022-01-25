@@ -2,11 +2,12 @@ import React from 'react';
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from '@mui/material';
 import numeral from 'numeral';
 
-function CardInmueble({ imagen, tipo, barrio, costo }) {
+function CardInmueble({ imagen, tipo, barrio, costo, openModal }) {
   return (
     <Card
       sx={{ maxWidth: 345 }}
-      elevation={3}>
+      elevation={3}
+      onClick={openModal}>
       <CardActionArea>
         <CardMedia
           component='img'
