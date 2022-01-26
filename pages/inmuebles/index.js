@@ -6,11 +6,17 @@ import { PaginationPage } from '../../components/Layout/PaginationPage';
 import { ENDPOINT } from '../../api/config';
 import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
 
-export default function Home({ inmuebles, numPages }) {
+export default function Home({ inmuebles, numPages, barrios }) {
   const [open, setOpen] = useState(false);
+  const [inmueble, setInmueble] = useState({});
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+  const showInmueble = async(id) => {
+    const resInmueble = await fetch(`${ENDPOINT}inmuebles/${id}`);
+    const data = await resInmueble.json();
+    setInmueble(data);
+  };
 
   return (
     <>
@@ -19,7 +25,9 @@ export default function Home({ inmuebles, numPages }) {
       </Head>
       <ModalInmueble
         open={open}
-        closeModal={closeModal}>
+        closeModal={closeModal}
+        inmueble={inmueble}
+        barrios={barrios}>
       </ModalInmueble>
       <Container
         className='container'>
@@ -40,7 +48,8 @@ export default function Home({ inmuebles, numPages }) {
                     tipo={inmueble.tipo}
                     barrio={inmueble.barrio.nombre}
                     costo={inmueble.costo}
-                    openModal={openModal}>
+                    openModal={openModal}
+                    showInmueble={() => showInmueble(inmueble.id)}>
                   </CardInmueble>
               </Grid>
             ))
@@ -57,12 +66,15 @@ export default function Home({ inmuebles, numPages }) {
 
 export async function getServerSideProps(context) {
   const page = context.query.page || 1;
-  const res = await fetch(`${ENDPOINT}inmuebles/all?page=${page}`);
-  const { data, last_page } = await res.json();
+  const resInmuebles = await fetch(`${ENDPOINT}inmuebles/all?page=${page}`);
+  const resBarrios = await fetch(`${ENDPOINT}barrios/all`);
+  const { data, last_page } = await resInmuebles.json();
+  const { barrios } = await resBarrios.json();
   return {
     props: {
       inmuebles: data,
-      numPages: last_page
+      numPages: last_page,
+      barrios: barrios
     }
   }
 }
