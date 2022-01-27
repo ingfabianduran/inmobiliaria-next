@@ -8,14 +8,32 @@ import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
 
 export default function Home({ inmuebles, numPages, barrios }) {
   const [open, setOpen] = useState(false);
-  const [inmueble, setInmueble] = useState({});
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [inmueble, setInmueble] = useState({
+    tipo: '',
+    costo: '',
+    barrio_id: '',
+    metrosCuadrados: '',
+    numeroPisos: '',
+    numeroHabitaciones: '',
+    numeroBanios: '',
+    direccion: '',
+    tieneSalaComedor: false,
+    tieneGaraje: false,
+    estaActivo: false,
+    fotos: []
+  });
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   const showInmueble = async(id) => {
+    setLoadingForm(true);
     const resInmueble = await fetch(`${ENDPOINT}inmuebles/${id}`);
     const data = await resInmueble.json();
-    setInmueble(data);
+    setTimeout(() => {
+      setLoadingForm(false);
+      setInmueble(data.inmueble);
+    }, 2000);
   };
 
   return (
@@ -27,7 +45,8 @@ export default function Home({ inmuebles, numPages, barrios }) {
         open={open}
         closeModal={closeModal}
         inmueble={inmueble}
-        barrios={barrios}>
+        barrios={barrios}
+        loading={loadingForm}>
       </ModalInmueble>
       <Container
         className='container'>
@@ -49,6 +68,7 @@ export default function Home({ inmuebles, numPages, barrios }) {
                     barrio={inmueble.barrio.nombre}
                     costo={inmueble.costo}
                     openModal={openModal}
+                    loading={true}
                     showInmueble={() => showInmueble(inmueble.id)}>
                   </CardInmueble>
               </Grid>
