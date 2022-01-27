@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import { Input, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { ModalFotosInmueble } from './ModalFotosInmueble';
 import { Formik } from 'formik';
 
@@ -120,7 +120,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                           onChange={handleChange} />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={10}>
                       <FormControl fullWidth>
                         <TextField
                           id='direccion'
@@ -129,6 +129,20 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                           variant='outlined'
                           value={values.direccion}
                           onChange={handleChange} />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <FormControl fullWidth>
+                        <label htmlFor='contained-button-file'>
+                          <Input accept='image/*' id='contained-button-file' multiple type='file' style={{ display: 'none' }} />
+                            <Button 
+                              variant='contained' 
+                              component='span' 
+                              size='large'
+                              fullWidth>
+                              Cargar Fotos
+                            </Button>
+                        </label>
                       </FormControl>
                     </Grid>
                     <Grid item xs={2}>
