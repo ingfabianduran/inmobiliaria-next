@@ -5,11 +5,21 @@ import { CardInmueble } from '../../components/Inmobiliaria/CardInmueble';
 import { PaginationPage } from '../../components/Layout/PaginationPage';
 import { ENDPOINT } from '../../api/config';
 import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
+import { Message } from '../../components/Layout/Message';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function Home({ inmuebles, numPages, barrios }) {
   const [open, setOpen] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
+  const [tipoSubmit, setTipoSubmit] = useState('POST');
+  const [stateAlert, setStateAlert] = useState({
+    open: false,
+    type: 'success',
+    message: ''
+  });
   const [inmueble, setInmueble] = useState({
+    id: '',
     tipo: '',
     costo: '',
     barrio_id: '',
@@ -18,21 +28,45 @@ export default function Home({ inmuebles, numPages, barrios }) {
     numeroHabitaciones: '',
     numeroBanios: '',
     direccion: '',
-    tieneSalaComedor: false,
-    tieneGaraje: false,
-    estaActivo: false,
-    fotos: []
+    tieneSalaComedor: 0,
+    tieneGaraje: 0,
+    estaActivo: 0,
+    fotos: [],
   });
+  const router = useRouter();
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+  const closeAlert = () => setStateAlert({ ...stateAlert, open: false });
+  
   const showInmueble = async(id) => {
     setLoadingForm(true);
-    const resInmueble = await fetch(`${ENDPOINT}inmuebles/${id}`);
-    const data = await resInmueble.json();
+    const resInmueble = await axios({
+      url: `${ENDPOINT}inmuebles/${id}`,
+      method: 'GET'
+    }); 
+    setTimeout(() => {
+      setTipoSubmit('PUT');
+      setLoadingForm(false);
+      setInmueble(resInmueble.data.inmueble);
+    }, 2000);
+  };
+
+  const submitInmueble = async(valuesForm, id) => {
+    setLoadingForm(true);
+    const url = id === '' ? `${ENDPOINT}inmuebles` : `${ENDPOINT}inmuebles/${id}`;
+    const resInmueble = await axios({
+      url: url,
+      method: tipoSubmit,
+      data: valuesForm
+    });
+    const { message } = resInmueble.data;
+    setStateAlert({ ...stateAlert, open: true, message: message });
+    setOpen(false);
+    setTipoSubmit('POST');
     setTimeout(() => {
       setLoadingForm(false);
-      setInmueble(data.inmueble);
+      router.push('/inmuebles');  
     }, 2000);
   };
 
@@ -41,12 +75,17 @@ export default function Home({ inmuebles, numPages, barrios }) {
       <Head>
         <title>Inmuebles</title>
       </Head>
+      <Message
+        state={stateAlert}
+        setState={closeAlert}>
+      </Message>
       <ModalInmueble
         open={open}
         closeModal={closeModal}
         inmueble={inmueble}
         barrios={barrios}
-        loading={loadingForm}>
+        loading={loadingForm}
+        submitForm={submitInmueble}>
       </ModalInmueble>
       <Container
         className='container'>
@@ -86,10 +125,10 @@ export default function Home({ inmuebles, numPages, barrios }) {
 
 export async function getServerSideProps(context) {
   const page = context.query.page || 1;
-  const resInmuebles = await fetch(`${ENDPOINT}inmuebles/all?page=${page}`);
-  const resBarrios = await fetch(`${ENDPOINT}barrios/all`);
-  const { data, last_page } = await resInmuebles.json();
-  const { barrios } = await resBarrios.json();
+  const resInmuebles = await axios({ url: `${ENDPOINT}inmuebles/all?page=${page}`, method: 'GET' });
+  const resBarrios = await axios({ url: `${ENDPOINT}barrios/all`, method: 'GET' }); 
+  const { data, last_page } = resInmuebles.data;
+  const { barrios } = resBarrios.data;
   return {
     props: {
       inmuebles: data,

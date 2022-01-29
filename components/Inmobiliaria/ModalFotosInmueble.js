@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dialog, DialogContent, ImageList, ImageListItem } from '@mui/material';
+import { Dialog, DialogContent, ImageList, ImageListItem, ImageListItemBar, Button } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
 function ModalFotosInmueble({ open, closeModal, fotos }) {
   return (
@@ -17,11 +18,21 @@ function ModalFotosInmueble({ open, closeModal, fotos }) {
             fotos.map(item => (
               <ImageListItem
                 key={item.id}>
-                  <img 
-                    src={`${item.url}`}
-                    srcSet={`${item.url}`}
-                    alt='Imagen Inmueble' 
-                    loading='lazy' />
+                <img
+                  src={`${item.url}`}
+                  srcSet={`${item.url}`}
+                  alt='Imagen Inmueble' 
+                  loading='lazy' />
+                  <ImageListItemBar
+                    actionIcon={
+                      <Button
+                        sx={{ margin: 1 }}
+                        variant='contained'
+                        color='error'
+                        startIcon={<Delete />}>
+                        Eliminar
+                      </Button>
+                    } />
               </ImageListItem>
             ))
           }

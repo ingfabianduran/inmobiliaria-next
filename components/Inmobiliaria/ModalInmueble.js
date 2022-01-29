@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Input, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import { Input, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField, FormControlLabel, Checkbox, FormGroup } from '@mui/material';
 import { ModalFotosInmueble } from './ModalFotosInmueble';
 import { Formik } from 'formik';
 
-function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
+function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitForm }) {
   const [openFotos, setOpenFotos] = useState(false);
   const openModalFotos = () => setOpenFotos(true);
   const closeModalFotos = () => setOpenFotos(false);
   const gestiones = ['Arriendo', 'Venta'];
+  const opciones = [{ text: 'Si', value: 1 }, { text: 'No', value: 0 }];
   
   return (
     <>
@@ -24,9 +25,10 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
         <Formik
           enableReinitialize
           initialValues={inmueble}
-          onSubmit={values => console.log(values) }>
+          onSubmit={values => {
+            submitForm(values, inmueble.id) 
+          }}>
           {({ values, handleSubmit, handleChange, errors, touched }) => {
-            console.log(values);
             return (
               <form
                 onSubmit={handleSubmit}>
@@ -37,6 +39,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                       <FormControl fullWidth>
                         <InputLabel id='labelTipoGestion'>Tipo de Gestión</InputLabel>
                         <Select
+                          name='tipo'
                           labelId='labelTipoGestion'
                           label='Tipo de Gestión'
                           value={values.tipo}
@@ -52,7 +55,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={4}>
                       <FormControl fullWidth>
                         <TextField
-                          id='costo'
+                          name='costo'
                           label="Costo"
                           type='number'
                           variant='outlined'
@@ -64,6 +67,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                       <FormControl fullWidth>
                         <InputLabel id='labelBarrioId'>Barrio</InputLabel>
                         <Select
+                          name='barrio_id'
                           labelId='labelBarrioId'
                           label='Barrio'
                           value={values.barrio_id}
@@ -79,7 +83,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={3}>
                       <FormControl fullWidth>
                         <TextField
-                          id='metrosCuadrados'
+                          name='metrosCuadrados'
                           label="Metros Cuadrados"
                           type='number'
                           variant='outlined'
@@ -90,7 +94,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={3}>
                       <FormControl fullWidth>
                         <TextField
-                          id='numeroPisos'
+                          name='numeroPisos'
                           label="N° de Pisos"
                           type='number'
                           variant='outlined'
@@ -101,7 +105,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={3}>
                       <FormControl fullWidth>
                         <TextField
-                          id='numeroHabitaciones'
+                          name='numeroHabitaciones'
                           label="N° de Habitaciones"
                           type='number'
                           variant='outlined'
@@ -112,7 +116,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={3}>
                       <FormControl fullWidth>
                         <TextField
-                          id='numeroBanios'
+                          name='numeroBanios'
                           label="N° de Banios"
                           type='number'
                           variant='outlined'
@@ -123,7 +127,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={10}>
                       <FormControl fullWidth>
                         <TextField
-                          id='direccion'
+                          name='direccion'
                           label="Dirección"
                           type='text'
                           variant='outlined'
@@ -134,7 +138,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     <Grid item xs={2}>
                       <FormControl fullWidth>
                         <label htmlFor='contained-button-file'>
-                          <Input accept='image/*' id='contained-button-file' multiple type='file' style={{ display: 'none' }} />
+                          <Input accept='image/*' name='fotos' multiple type='file' style={{ display: 'none' }} />
                             <Button 
                               variant='contained' 
                               component='span' 
@@ -147,32 +151,53 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                     </Grid>
                     <Grid item xs={2}>
                       <FormControl fullWidth>
-                        <FormControlLabel 
-                          control={<Checkbox value={values.tieneSalaComedor} 
-                          checked={values.tieneSalaComedor === 1 ? true : false} />} 
+                        <InputLabel id='tieneSalaComedorId'>Sala Comedor</InputLabel>
+                        <Select
+                          name='tieneSalaComedor'
+                          labelId='tieneSalaComedorId'
                           label='Sala Comedor'
-                          onChange={handleChange}>  
-                        </FormControlLabel>
+                          value={values.tieneSalaComedor}
+                          onChange={handleChange}>
+                          {
+                            opciones.map(item => (
+                              <MenuItem key={item.text} value={item.value}>{ item.text }</MenuItem>
+                            ))
+                          }
+                        </Select>
                       </FormControl>
                     </Grid>
                     <Grid item xs={2}>
                       <FormControl fullWidth>
-                        <FormControlLabel 
-                          control={<Checkbox value={values.tieneGaraje} 
-                          checked={values.tieneGaraje === 1 ? true : false} />} 
-                          label='Garaje'
-                          onChange={handleChange}>
-                        </FormControlLabel>
-                      </FormControl>
+                          <InputLabel id='tieneGarajeId'>Garaje</InputLabel>
+                          <Select
+                            name='tieneGaraje'
+                            labelId='tieneGarajeId'
+                            label='Tiene Garaje'
+                            value={values.tieneGaraje}
+                            onChange={handleChange}>
+                            {
+                              opciones.map(item => (
+                                <MenuItem key={item.text} value={item.value}>{ item.text }</MenuItem>
+                              ))
+                            }
+                          </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={2}>
                       <FormControl fullWidth>
-                        <FormControlLabel 
-                          control={<Checkbox value={values.estaActivo} 
-                          checked={values.estaActivo === 1 ? true : false} />} 
-                          label='Activo'
+                        <InputLabel id='estaActivoId'>Esta Activo</InputLabel>
+                        <Select
+                          name='estaActivo'
+                          labelId='estaActivoId'
+                          label='Esta Activo'
+                          value={values.estaActivo}
                           onChange={handleChange}>
-                        </FormControlLabel>
+                          {
+                            opciones.map(item => (
+                              <MenuItem key={item.text} value={item.value}>{ item.text }</MenuItem>
+                            ))
+                          }
+                        </Select>
                       </FormControl>
                     </Grid>
                   </Grid>
@@ -187,7 +212,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading }) {
                       <>
                         { inmueble.fotos.length > 0 && <Button variant='contained' onClick={openModalFotos}>Galeria de Fotos</Button> }
                         <Button variant='contained' color='inherit'>Cancelar</Button>
-                        <Button variant='contained'>Guardar</Button>
+                        <Button variant='contained' type='submit'>Guardar</Button>
                       </>
                   }
                 </DialogActions>
