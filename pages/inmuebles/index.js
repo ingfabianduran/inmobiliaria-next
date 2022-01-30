@@ -33,6 +33,7 @@ export default function Home({ inmuebles, numPages, barrios }) {
     estaActivo: 0,
     fotos: [],
   });
+  const [page, setPage] = useState(1);
   const router = useRouter();
 
   const openModal = () => setOpen(true);
@@ -88,13 +89,13 @@ export default function Home({ inmuebles, numPages, barrios }) {
         submitForm={submitInmueble}>
       </ModalInmueble>
       <Container
-        className='container'>
+        className='container'
+        fixed>
         <Grid 
           container
           rowSpacing={3}
           justifyContent='center'
-          alignItems='center'
-          sx={{ minHeight: '80vh' }}>
+          alignItems='center'>
           {
             inmuebles.map(inmueble => (
               <Grid
@@ -116,7 +117,9 @@ export default function Home({ inmuebles, numPages, barrios }) {
         </Grid>
         <PaginationPage
           numPages={numPages}
-          url='/inmuebles'>
+          url='/inmuebles'
+          page={page}
+          setPage={setPage}>
         </PaginationPage>
       </Container>
     </>
