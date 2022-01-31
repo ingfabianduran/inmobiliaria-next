@@ -211,7 +211,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
                     : 
                       <>
                         { inmueble.fotos.length > 0 && <Button variant='contained' onClick={openModalFotos}>Galeria de Fotos</Button> }
-                        <Button variant='contained' color='inherit'>Cancelar</Button>
+                        <Button variant='contained' color='inherit' onClick={closeModal}>Cancelar</Button>
                         <Button variant='contained' type='submit'>Guardar</Button>
                       </>
                   }

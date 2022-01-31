@@ -1,38 +1,25 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material';
+import { AddBusiness } from '@mui/icons-material';
 import { CardInmueble } from '../../components/Inmobiliaria/CardInmueble';
 import { PaginationPage } from '../../components/Layout/PaginationPage';
 import { ENDPOINT } from '../../api/config';
 import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
 import { Message } from '../../components/Layout/Message';
 import { useRouter } from 'next/router';
+import { INMUEBLE, MESSAGE } from '../../states/states';
 import axios from 'axios';
 
 export default function Home({ inmuebles, numPages, barrios }) {
+  const listSpeedActions = [
+    { texto: 'Registrar Inmueble', icon: <AddBusiness></AddBusiness> }
+  ];
   const [open, setOpen] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
   const [tipoSubmit, setTipoSubmit] = useState('POST');
-  const [stateAlert, setStateAlert] = useState({
-    open: false,
-    type: 'success',
-    message: ''
-  });
-  const [inmueble, setInmueble] = useState({
-    id: '',
-    tipo: '',
-    costo: '',
-    barrio_id: '',
-    metrosCuadrados: '',
-    numeroPisos: '',
-    numeroHabitaciones: '',
-    numeroBanios: '',
-    direccion: '',
-    tieneSalaComedor: 0,
-    tieneGaraje: 0,
-    estaActivo: 0,
-    fotos: [],
-  });
+  const [stateAlert, setStateAlert] = useState(MESSAGE);
+  const [inmueble, setInmueble] = useState(INMUEBLE);
   const [page, setPage] = useState(1);
   const router = useRouter();
 
@@ -114,6 +101,24 @@ export default function Home({ inmuebles, numPages, barrios }) {
               </Grid>
             ))
           }
+          <SpeedDial
+            ariaLabel='Agregar Inmueble'
+            sx={{ position: 'absolute', bottom: 16, right: 1 }}
+            icon={<SpeedDialIcon></SpeedDialIcon>}>
+            {
+              listSpeedActions.map(item => (
+                <SpeedDialAction
+                  key={item.texto}
+                  icon={item.icon}
+                  tooltipTitle={item.texto}
+                  onClick={() => {
+                    setOpen(true);
+                    setInmueble(INMUEBLE);
+                  }}>
+                </SpeedDialAction>
+              ))
+            }
+          </SpeedDial>
         </Grid>
         <PaginationPage
           numPages={numPages}
