@@ -10,8 +10,10 @@ import { Message } from '../../components/Layout/Message';
 import { useRouter } from 'next/router';
 import { INMUEBLE, MESSAGE } from '../../states/states';
 import axios from 'axios';
+import imageHouse from '../../images/House.jpg';
 
 export default function Home({ inmuebles, numPages, barrios }) {
+  
   const listSpeedActions = [
     { texto: 'Registrar Inmueble', icon: <AddBusiness></AddBusiness> }
   ];
@@ -42,7 +44,7 @@ export default function Home({ inmuebles, numPages, barrios }) {
 
   const submitInmueble = async(valuesForm, id) => {
     setLoadingForm(true);
-    const url = id === '' ? `${ENDPOINT}inmuebles` : `${ENDPOINT}inmuebles/${id}`;
+    const url = id === '' ? `${ENDPOINT}inmuebles/add` : `${ENDPOINT}inmuebles/${id}`;
     const resInmueble = await axios({
       url: url,
       method: tipoSubmit,
@@ -90,7 +92,7 @@ export default function Home({ inmuebles, numPages, barrios }) {
                 item
                 xs={4}>
                   <CardInmueble
-                    imagen={inmueble.fotos[0].url}
+                    imagen={inmueble.fotos.length > 0 ? inmueble.fotos[0].url : imageHouse.src }
                     tipo={inmueble.tipo}
                     barrio={inmueble.barrio.nombre}
                     costo={inmueble.costo}
