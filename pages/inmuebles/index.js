@@ -43,12 +43,17 @@ export default function Home({ inmuebles, numPages, barrios }) {
   };
 
   const submitInmueble = async(valuesForm, id) => {
+    // const formData = new FormData();
+    // for (const key in valuesForm) formData.append(key, valuesForm[key]);
     setLoadingForm(true);
     const url = id === '' ? `${ENDPOINT}inmuebles/add` : `${ENDPOINT}inmuebles/${id}`;
     const resInmueble = await axios({
       url: url,
       method: tipoSubmit,
-      data: valuesForm
+      data: valuesForm,
+      // headers: {
+      //   'Content-Type': 'multipart/form-data'
+      // }
     });
     const { message } = resInmueble.data;
     setStateAlert({ ...stateAlert, open: true, message: message });

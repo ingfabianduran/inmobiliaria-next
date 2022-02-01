@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { Input, Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField, FormControlLabel, Checkbox, FormGroup } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { ModalFotosInmueble } from './ModalFotosInmueble';
 import { Formik } from 'formik';
 
 function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitForm }) {
   const [openFotos, setOpenFotos] = useState(false);
+  const [formImagenes, setFormImagenes] = useState({
+    imagenes: ''
+  });
   const openModalFotos = () => setOpenFotos(true);
   const closeModalFotos = () => setOpenFotos(false);
   const gestiones = ['Arriendo', 'Venta'];
@@ -15,7 +18,8 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
       <ModalFotosInmueble
         open={openFotos}
         closeModal={closeModalFotos}
-        fotos={inmueble.fotos}>
+        fotos={inmueble.fotos}
+        formImagenes={formImagenes}>
       </ModalFotosInmueble>
       <Dialog
         open={open}
@@ -28,7 +32,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
           onSubmit={values => {
             submitForm(values, inmueble.id) 
           }}>
-          {({ values, handleSubmit, handleChange, errors, touched }) => {
+          {({ values, handleSubmit, handleChange, errors, touched, setFieldValue }) => {
             return (
               <form
                 onSubmit={handleSubmit}>
@@ -124,7 +128,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
                           onChange={handleChange} />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={10}>
+                    <Grid item xs={12}>
                       <FormControl fullWidth>
                         <TextField
                           name='direccion'
@@ -133,20 +137,6 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
                           variant='outlined'
                           value={values.direccion}
                           onChange={handleChange} />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={2}>
-                      <FormControl fullWidth>
-                        <label htmlFor='contained-button-file'>
-                          <Input accept='image/*' name='fotos' multiple type='file' style={{ display: 'none' }} />
-                            <Button 
-                              variant='contained' 
-                              component='span' 
-                              size='large'
-                              fullWidth>
-                              Cargar Fotos
-                            </Button>
-                        </label>
                       </FormControl>
                     </Grid>
                     <Grid item xs={2}>
@@ -210,7 +200,7 @@ function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitFor
                         sx={{ marginRight: 2 }} />
                     : 
                       <>
-                        { inmueble.fotos.length > 0 && <Button variant='contained' onClick={openModalFotos}>Galeria de Fotos</Button> }
+                        <Button variant='contained' onClick={openModalFotos}>Galeria de Fotos</Button>
                         <Button variant='contained' color='inherit' onClick={closeModal}>Cancelar</Button>
                         <Button variant='contained' type='submit'>Guardar</Button>
                       </>

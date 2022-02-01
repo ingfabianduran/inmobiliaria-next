@@ -12,6 +12,7 @@ const INMUEBLE = {
   tieneGaraje: 0,
   estaActivo: 0,
   fotos: [],
+  imagenes: '',
 };
 
 const MESSAGE = {
