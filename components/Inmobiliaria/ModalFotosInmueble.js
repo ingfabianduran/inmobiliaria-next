@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogActions, ImageList, ImageListItem, ImageListItemBar, Button, Input, Alert } from '@mui/material';
+import { Dialog, DialogContent, DialogActions, ImageList, ImageListItem, ImageListItemBar, Button, Input, Alert, CircularProgress } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { Formik } from 'formik';
 
-function ModalFotosInmueble({ open, closeModal, fotos, formImagenes }) {
+function ModalFotosInmueble({ open, closeModal, fotos, formImagenes, submitForm, loading, deleteFoto }) {
   return (
     <Dialog
       open={open}
@@ -32,7 +32,8 @@ function ModalFotosInmueble({ open, closeModal, fotos, formImagenes }) {
                             sx={{ margin: 1 }}
                             variant='contained'
                             color='error'
-                            startIcon={<Delete />}>
+                            startIcon={<Delete />}
+                            onClick={() => deleteFoto(item.id)}>
                             Eliminar
                           </Button>
                         } />
@@ -49,38 +50,48 @@ function ModalFotosInmueble({ open, closeModal, fotos, formImagenes }) {
         enableReinitialize
         initialValues={formImagenes}
         onSubmit={values => {
-          console.log(values);
+          submitForm(values);
         }}>
         {({ values, handleSubmit, handleChange, errors, touched, setFieldValue }) => {
           return (
             <form
               onSubmit={handleSubmit}>
-              <label 
-                htmlFor='contained-button-file'>
-                <Input
-                  accept='image/*' 
-                  id='contained-button-file' 
-                  name='imagenes' 
-                  multiple 
-                  type='file' 
-                  style={{ display: 'none' }} 
-                  onChange={e => {
-                    const files = e.target.files[0];
-                  }} />
-                <Button 
-                  sx={{ marginRight: 1 }} 
-                  variant='contained' 
-                  component='span'
-                  color='inherit'>
-                  Seleccionar Fotos
-                </Button>
-              </label>
-              <Button 
-                type='submit'
-                variant='contained' 
-                component='span'>
-                Subir Fotos
-              </Button>
+                {
+                  loading ?
+                    <CircularProgress
+                      size={35}
+                      sx={{ marginRight: 1 }}>
+                    </CircularProgress>
+                  : 
+                    <>
+                      <label 
+                        htmlFor='contained-button-file'>
+                        <Input
+                          accept='image/*' 
+                          id='contained-button-file' 
+                          name='imagenes' 
+                          multiple 
+                          type='file' 
+                          style={{ display: 'none' }} 
+                          onChange={e => {
+                            const files = e.target.files[0];
+                            setFieldValue('imagenes', files);
+                          }} />
+                        <Button 
+                          sx={{ marginRight: 1 }} 
+                          variant='contained' 
+                          component='span'
+                          color='inherit'>
+                          Seleccionar Fotos
+                        </Button>
+                      </label>
+                      <Button 
+                        type='submit'
+                        variant='contained'>
+                        Subir Fotos
+                      </Button>
+                    </>
+                  } 
             </form>
           )}}
         </Formik>

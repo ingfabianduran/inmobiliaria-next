@@ -15,10 +15,4 @@ const INMUEBLE = {
   imagenes: '',
 };
 
-const MESSAGE = {
-  open: false,
-  type: 'success',
-  message: ''
-};
-
-export { INMUEBLE, MESSAGE };
+export { INMUEBLE };

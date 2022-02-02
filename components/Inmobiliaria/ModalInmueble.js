@@ -2,24 +2,57 @@ import { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Grid, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { ModalFotosInmueble } from './ModalFotosInmueble';
 import { Formik } from 'formik';
+import axios from 'axios';
+import { ENDPOINT } from '../../api/config';
+import { toast } from 'react-toastify';
 
-function ModalInmueble({ open, closeModal, inmueble, barrios, loading, submitForm }) {
+function ModalInmueble({ open, closeModal, inmueble, setInmueble, barrios, loading, submitForm }) {
   const [openFotos, setOpenFotos] = useState(false);
   const [formImagenes, setFormImagenes] = useState({
-    imagenes: ''
+    imagenes: '',
+    inmueble_id: inmueble.id
   });
-  const openModalFotos = () => setOpenFotos(true);
-  const closeModalFotos = () => setOpenFotos(false);
+  const [loadingForm, setLoadingForm] = useState(false);
   const gestiones = ['Arriendo', 'Venta'];
   const opciones = [{ text: 'Si', value: 1 }, { text: 'No', value: 0 }];
-  
+  const openModalFotos = () => setOpenFotos(true);
+  const closeModalFotos = () => setOpenFotos(false);
+
+  const submitFotos = async(valuesForm) => {
+    setLoadingForm(true);
+    setFormImagenes(valuesForm);
+    const formData = new FormData();
+    formData.append('imagenes', valuesForm.imagenes);
+    formData.append('inmueble_id', inmueble.id);
+    const resFotos = await axios({
+      method: 'POST',
+      url: `${ENDPOINT}fotos/add`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    setTimeout(() => {
+      setLoadingForm(false);
+      const { message, inmueble } = resFotos.data;
+      setInmueble(inmueble);
+      toast.success(message);
+    }, 2000);
+  };
+
+  const deleteFoto = (id) => {
+    
+  };
+
   return (
     <>
       <ModalFotosInmueble
         open={openFotos}
         closeModal={closeModalFotos}
         fotos={inmueble.fotos}
-        formImagenes={formImagenes}>
+        formImagenes={formImagenes}
+        submitForm={submitFotos}
+        loading={loadingForm}>
       </ModalFotosInmueble>
       <Dialog
         open={open}

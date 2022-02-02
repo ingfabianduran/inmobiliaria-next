@@ -14,6 +14,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { MapsHomeWork } from '@mui/icons-material';
 import { Footer } from './Footer';
 import { ListDrawer } from './ListDrawer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const drawerWidth = 240;
 
@@ -115,6 +117,7 @@ export default function Layout({ children }) {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        <ToastContainer toastClassName='toast-font'></ToastContainer>
         { children }
       </Main>
       <Footer></Footer>

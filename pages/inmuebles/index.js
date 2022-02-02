@@ -6,11 +6,11 @@ import { CardInmueble } from '../../components/Inmobiliaria/CardInmueble';
 import { PaginationPage } from '../../components/Layout/PaginationPage';
 import { ENDPOINT } from '../../api/config';
 import { ModalInmueble } from '../../components/Inmobiliaria/ModalInmueble';
-import { Message } from '../../components/Layout/Message';
 import { useRouter } from 'next/router';
-import { INMUEBLE, MESSAGE } from '../../states/states';
+import { INMUEBLE } from '../../states/states';
 import axios from 'axios';
 import imageHouse from '../../images/House.jpg';
+import { toast } from 'react-toastify';
 
 export default function Home({ inmuebles, numPages, barrios }) {
   
@@ -20,14 +20,12 @@ export default function Home({ inmuebles, numPages, barrios }) {
   const [open, setOpen] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
   const [tipoSubmit, setTipoSubmit] = useState('POST');
-  const [stateAlert, setStateAlert] = useState(MESSAGE);
   const [inmueble, setInmueble] = useState(INMUEBLE);
   const [page, setPage] = useState(1);
   const router = useRouter();
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-  const closeAlert = () => setStateAlert({ ...stateAlert, open: false });
   
   const showInmueble = async(id) => {
     setLoadingForm(true);
@@ -43,20 +41,15 @@ export default function Home({ inmuebles, numPages, barrios }) {
   };
 
   const submitInmueble = async(valuesForm, id) => {
-    // const formData = new FormData();
-    // for (const key in valuesForm) formData.append(key, valuesForm[key]);
     setLoadingForm(true);
     const url = id === '' ? `${ENDPOINT}inmuebles/add` : `${ENDPOINT}inmuebles/${id}`;
     const resInmueble = await axios({
       url: url,
       method: tipoSubmit,
       data: valuesForm,
-      // headers: {
-      //   'Content-Type': 'multipart/form-data'
-      // }
     });
     const { message } = resInmueble.data;
-    setStateAlert({ ...stateAlert, open: true, message: message });
+    toast.success(message);
     setOpen(false);
     setTipoSubmit('POST');
     setTimeout(() => {
@@ -70,17 +63,14 @@ export default function Home({ inmuebles, numPages, barrios }) {
       <Head>
         <title>Inmuebles</title>
       </Head>
-      <Message
-        state={stateAlert}
-        setState={closeAlert}>
-      </Message>
       <ModalInmueble
         open={open}
         closeModal={closeModal}
         inmueble={inmueble}
         barrios={barrios}
         loading={loadingForm}
-        submitForm={submitInmueble}>
+        submitForm={submitInmueble}
+        setInmueble={setInmueble}>
       </ModalInmueble>
       <Container
         className='container'
