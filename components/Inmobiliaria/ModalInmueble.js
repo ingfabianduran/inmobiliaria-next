@@ -40,8 +40,18 @@ function ModalInmueble({ open, closeModal, inmueble, setInmueble, barrios, loadi
     }, 2000);
   };
 
-  const deleteFoto = (id) => {
-    
+  const deleteFoto = async(id) => {
+    setLoadingForm(true);
+    const resFotos = await axios({
+      method: 'DELETE',
+      url: `${ENDPOINT}fotos/${id}`
+    });
+    setTimeout(() => {
+      setLoadingForm(false);
+      const { message, inmueble } = resFotos.data;
+      setInmueble(inmueble);
+      toast.success(message);
+    }, 2000);
   };
 
   return (
@@ -52,7 +62,8 @@ function ModalInmueble({ open, closeModal, inmueble, setInmueble, barrios, loadi
         fotos={inmueble.fotos}
         formImagenes={formImagenes}
         submitForm={submitFotos}
-        loading={loadingForm}>
+        loading={loadingForm}
+        deleteFoto={deleteFoto}>
       </ModalFotosInmueble>
       <Dialog
         open={open}

@@ -13,7 +13,6 @@ import imageHouse from '../../images/House.jpg';
 import { toast } from 'react-toastify';
 
 export default function Home({ inmuebles, numPages, barrios }) {
-  
   const listSpeedActions = [
     { texto: 'Registrar Inmueble', icon: <AddBusiness></AddBusiness> }
   ];

@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { MapsHomeWork } from '@mui/icons-material';
+import { MapsHomeWork, People, ManageAccounts } from '@mui/icons-material';
 import { Footer } from './Footer';
 import { ListDrawer } from './ListDrawer';
 import { ToastContainer } from 'react-toastify';
@@ -66,7 +66,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Layout({ children }) {
   const theme = useTheme();
   const listItem = [
-    { texto: 'Inmuebles', icon: <MapsHomeWork />, url: '/inmuebles' }
+    { texto: 'Inmuebles', icon: <MapsHomeWork />, url: '/inmuebles' },
+    { texto: 'Arrendadores', icon: <People />, url: '/arrendadores' },
+    { texto: 'Arrendatarios', icon: <ManageAccounts />, url: '/arrendatarios' }
   ];  
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => setOpen(true);

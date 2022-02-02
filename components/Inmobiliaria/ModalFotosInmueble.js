@@ -69,8 +69,7 @@ function ModalFotosInmueble({ open, closeModal, fotos, formImagenes, submitForm,
                         <Input
                           accept='image/*' 
                           id='contained-button-file' 
-                          name='imagenes' 
-                          multiple 
+                          name='imagenes'  
                           type='file' 
                           style={{ display: 'none' }} 
                           onChange={e => {
