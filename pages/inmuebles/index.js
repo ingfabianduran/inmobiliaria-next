@@ -118,7 +118,7 @@ export default function Home({ inmuebles, numPages, barrios }) {
         </Grid>
         <PaginationPage
           numPages={numPages}
-          url='/inmuebles'
+          url='/inmuebles?'
           page={page}
           setPage={setPage}>
         </PaginationPage>

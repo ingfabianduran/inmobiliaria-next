@@ -6,7 +6,7 @@ function PaginationPage({ numPages, page, setPage, url }) {
   const router = useRouter();
   const getData = async(event, value) => {
     setPage(value);
-    router.push(`${url}?page=${value}`);
+    router.push(`${url}page=${value}`);
   };
   return (
     <Stack

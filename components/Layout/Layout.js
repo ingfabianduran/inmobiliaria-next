@@ -66,9 +66,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Layout({ children }) {
   const theme = useTheme();
   const listItem = [
-    { texto: 'Inmuebles', icon: <MapsHomeWork />, url: '/inmuebles' },
-    { texto: 'Arrendadores', icon: <People />, url: '/arrendadores?tipo=Arrendadores&&page=1' },
-    { texto: 'Arrendatarios', icon: <ManageAccounts />, url: '/arrendatarios?tipo=Arrendatarios&&page=1' }
+    { texto: 'Inmuebles', icon: <MapsHomeWork />, url: '/inmuebles?page=1' },
+    { texto: 'Arrendadores', icon: <People />, url: '/personas?tipo=Arrendador&&page=1' },
+    { texto: 'Arrendatarios', icon: <ManageAccounts />, url: '/personas?tipo=Arrendatario&&page=1' }
   ];  
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => setOpen(true);
