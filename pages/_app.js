@@ -5,6 +5,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { Theme } from '../themes/Theme';
 import Router from 'next/router';
 import '../styles/globals.css';
+import { Provider } from 'react-redux'
+import { store } from '../store/index';
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(false);
@@ -22,15 +24,18 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <ThemeProvider theme={Theme}>
-      <Layout>
-        <Loader
-          loading={loading}>
-        </Loader>
-        <Component 
-          {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <Provider
+      store={store}>
+      <ThemeProvider theme={Theme}>
+        <Layout>
+          <Loader
+            loading={loading}>
+          </Loader>
+          <Component 
+            {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </Provider>
   )
 }
 

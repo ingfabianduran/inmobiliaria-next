@@ -17,8 +17,8 @@ html, body {
 }
 
 .header-table {
-  background-color: #F25C05;
-  color: white;
+  background-color: #F25C05 !important;
+  color: white !important;
   font-family: 'Roboto Condensed', sans-serif !important;
   font-size: 16px;
   font-weight: bolder;
